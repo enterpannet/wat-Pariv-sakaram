@@ -30,14 +30,15 @@ function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus 
     const totalUsers = users.length;
     const activeUsers = users.filter(user => user.isActive).length;
     const inactiveUsers = totalUsers - activeUsers;
-    const setDownUsers = users.filter(user => user.IsSetdown).length
-    const inSetDownUsers = totalUsers - setDownUsers
+    const setDownUsers = users.filter(user => user.IsSetdown).length;
+    const inSetDownUsers = totalUsers - setDownUsers;
 
     return (
-        <div className="mt-8 bg-white p-4 rounded shadow-md">
-            <h2 className="text-xl font-bold mb-4">รายชื่อพระปริวาสกรรม</h2>
-            <p className='flex justify-center items-center text-xl'>จำนวนพระปริวาสทั้งหมด : {totalUsers} | จำนวนที่สวดแล้ว : {activeUsers} | จำนวนที่ยังไม่ได้สวด: {inactiveUsers}</p>
-            <p className='flex justify-center items-center text-xl'>จำนวนที่สวดแล้ว : {setDownUsers} | จำนวนที่ยังไม่ได้สวด: {inSetDownUsers}</p>
+        <div className="mt-8 bg-white p-4 rounded shadow-md overflow-x-auto">
+            <h2 className="text-xl font-bold mb-4 text-center">รายชื่อพระปริวาสกรรม</h2>
+            <p className="flex justify-center items-center text-xl mb-4">จำนวนพระปริวาสทั้งหมด: {totalUsers} | จำนวนที่สวดแล้ว: {activeUsers} | จำนวนที่ยังไม่ได้สวด: {inactiveUsers}</p>
+            <p className="flex justify-center items-center text-xl mb-4">จำนวนที่จัดที่นั่งแล้ว: {setDownUsers} | จำนวนที่ยังไม่ได้จัดที่นั่ง: {inSetDownUsers}</p>
+            
             <table id="user-table" className="w-full border-collapse border border-gray-300">
                 <thead>
                     <tr className="bg-gray-200">
@@ -84,7 +85,7 @@ function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus 
                     ))}
                 </tbody>
             </table>
-            <button onClick={exportToPDF} className="mb-4 bg-blue-500 text-white px-4 py-2 rounded">Export to PDF</button>
+            <button onClick={exportToPDF} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Export to PDF</button>
         </div>
     );
 }
