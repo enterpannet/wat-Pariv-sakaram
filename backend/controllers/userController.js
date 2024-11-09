@@ -22,6 +22,7 @@ export const createUser = async (req, res) => {
             province,
             phoneNumber,
             chronicIllness: chronicIllness || null,
+            isActive: false // Ensure this is set to false by default
         });
         console.log(newUser);
 
@@ -32,6 +33,7 @@ export const createUser = async (req, res) => {
     }
 };
 
+
 export const deleteUser = async (req, res) => {
     const { id } = req.params;
     try {
@@ -40,5 +42,16 @@ export const deleteUser = async (req, res) => {
     } catch (error) {
         console.error('Error deleting user:', error);
         res.status(500).send('Error deleting user');
+    }
+};
+export const updateUserStatus = async (req, res) => {
+    const { id } = req.params;
+    const { isActive } = req.body;
+    try {
+        const updatedUser = await updateUserById(id, { isActive });
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.error('Error updating user status:', error);
+        res.status(500).send('Error updating user status');
     }
 };
