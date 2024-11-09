@@ -38,7 +38,7 @@ services:
       context: ./backend
     container_name: express_server
     environment:
-      DATABASE_URL: "postgresql://watRoot:wat123546@host.docker.internal:5432/wat"
+      DATABASE_URL: "postgresql://watRoot:wat123546@210.246.215.231:5432/wat"
     ports:
       - '5000:5000'
     networks:
