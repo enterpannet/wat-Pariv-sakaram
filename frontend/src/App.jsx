@@ -45,28 +45,27 @@ function App() {
             console.error('Error deleting user:', error);
         }
     };
-
     const toggleActiveStatus = async (id) => {
         const user = users.find(u => u.id === id);
         if (user) {
             try {
-                const response = await axios.patch(`http://210.246.215.231:5000/api/v1/users/${id}`, {
+                const response = await axios.patch(`http://210.246.215.231:5000/api/v1/users/${id}/active-status`, {
                     isActive: !user.isActive
                 });
                 if (response.status === 200) {
                     fetchUsers(); // Refresh the user list after update
                 }
             } catch (error) {
-                console.error('Error updating user status:', error);
+                console.error('Error updating user active status:', error);
             }
         }
     };
-
+    
     const toggleSetdownStatus = async (id) => {
         const user = users.find(u => u.id === id);
         if (user) {
             try {
-                const response = await axios.patch(`http://210.246.215.231:5000/api/v1/users/${id}`, {
+                const response = await axios.patch(`http://210.246.215.231:5000/api/v1/users/${id}/setdown-status`, {
                     IsSetdown: !user.IsSetdown
                 });
                 if (response.status === 200) {
@@ -77,7 +76,7 @@ function App() {
             }
         }
     };
-
+    
     return (
         <Router>
             <Routes>
