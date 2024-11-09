@@ -1,3 +1,36 @@
+# version: '3.8'
+# services:
+#   backend:
+#     build:
+#       context: ./backend
+#     container_name: express_server
+#     environment:
+#       DATABASE_URL: "postgresql://watRoot:wat123546@host.docker.internal:5432/wat" # ใช้ host.docker.internal เพื่อเชื่อมต่อกับ PostgreSQL ที่ติดตั้งใน VPS โดยตรง
+#       # DATABASE_URL: "postgresql://watRoot:wat123546@210.246.215.231:5432/wat"
+#     ports:
+#       - '5000:5000'
+
+#   frontend:
+#     build:
+#       context: ./frontend
+#     container_name: react_app
+#     ports:
+#       - '3000:3000'
+#     stdin_open: true
+#     tty: true
+
+#   nginx:
+#     image: nginx:latest
+#     container_name: nginx_proxy
+#     depends_on:
+#       - frontend
+#       - backend
+#     ports:
+#       - '80:80'
+#     volumes:
+#       - ./nginx.conf:/etc/nginx/nginx.conf
+
+
 version: '3.8'
 services:
   backend:
@@ -5,10 +38,11 @@ services:
       context: ./backend
     container_name: express_server
     environment:
-      DATABASE_URL: "postgresql://watRoot:wat123546@host.docker.internal:5432/wat" # ใช้ host.docker.internal เพื่อเชื่อมต่อกับ PostgreSQL ที่ติดตั้งใน VPS โดยตรง
-      # DATABASE_URL: "postgresql://watRoot:wat123546@210.246.215.231:5432/wat"
+      DATABASE_URL: "postgresql://watRoot:wat123546@host.docker.internal:5432/wat"
     ports:
       - '5000:5000'
+    networks:
+      - app_network
 
   frontend:
     build:
@@ -16,6 +50,11 @@ services:
     container_name: react_app
     ports:
       - '3000:3000'
+    environment:
+      # เพิ่ม URL ของ backend เพื่อให้ frontend ติดต่อได้
+      REACT_APP_BACKEND_URL: "http://express_server:5000"
+    networks:
+      - app_network
     stdin_open: true
     tty: true
 
@@ -29,3 +68,9 @@ services:
       - '80:80'
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

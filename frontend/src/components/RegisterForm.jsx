@@ -24,7 +24,7 @@ function RegisterForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/v1/users', formData);
+            await axios.post('http://express_server:5000/api/v1/users', formData);
             setPopupMessage('Registration successful!');
             setIsSuccess(true);
         } catch (error) {
