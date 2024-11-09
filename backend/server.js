@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost' // URL ของ frontend
+    origin: 'http://210.246.215.231/' // URL ของ frontend
 }));
 app.use(bodyParser.json());
 
