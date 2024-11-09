@@ -68,7 +68,7 @@ function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus 
                                     onClick={() => toggleActiveStatus(user.id)}
                                     className={`px-2 py-1 rounded mr-2 ${user.isActive ? 'bg-green-500' : 'bg-yellow-500'} text-white`}
                                 >
-                                    {user.isActive ? 'ยังไม่ได้สวด' : 'สวดแล้ว'}
+                                    {user.isActive ? 'สวดแล้ว' : 'ยังไม่ได้สวด'}
                                 </button>
                                 <button
                                     onClick={() => toggleSetdownStatus(user.id)}
