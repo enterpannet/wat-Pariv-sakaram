@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "age" SET DATA TYPE TEXT,
+ALTER COLUMN "monasticYears" SET DATA TYPE TEXT;
