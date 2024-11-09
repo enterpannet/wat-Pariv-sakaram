@@ -27,7 +27,7 @@ function App() {
                     'Content-Type': 'application/json'
                 }
             });
-            if (response.status === 200) {
+            if (response.status === 201) {
                 fetchUsers();
             }
         } catch (error) {
@@ -62,13 +62,36 @@ function App() {
         }
     };
 
+    const toggleSetdownStatus = async (id) => {
+        const user = users.find(u => u.id === id);
+        if (user) {
+            try {
+                const response = await axios.patch(`http://210.246.215.231:5000/api/v1/users/${id}`, {
+                    IsSetdown: !user.IsSetdown
+                });
+                if (response.status === 200) {
+                    fetchUsers(); // Refresh the user list after update
+                }
+            } catch (error) {
+                console.error('Error updating user setdown status:', error);
+            }
+        }
+    };
+
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<RegisterForm addUser={addUser} />} />
                 <Route 
                     path="/view" 
-                    element={<UserTable users={users} deleteUser={deleteUser} toggleActiveStatus={toggleActiveStatus} />} 
+                    element={
+                        <UserTable 
+                            users={users} 
+                            deleteUser={deleteUser} 
+                            toggleActiveStatus={toggleActiveStatus} 
+                            toggleSetdownStatus={toggleSetdownStatus} 
+                        />
+                    } 
                 />
             </Routes>
         </Router>

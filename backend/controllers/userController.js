@@ -1,4 +1,4 @@
-import { getAllUsers, addUser, deleteUserById, updateUserById } from '../services/userService.js';
+import { getAllUsers, addUser, deleteUserById, updateUserStatus, updateUserSetdown } from '../services/userService.js';
 
 export const getUsers = async (req, res) => {
     try {
@@ -22,7 +22,8 @@ export const createUser = async (req, res) => {
             province,
             phoneNumber,
             chronicIllness: chronicIllness || null,
-            isActive: false // Ensure this is set to false by default
+            isActive: false,
+            IsSetdown: false
         });
         console.log(newUser);
 
@@ -32,7 +33,6 @@ export const createUser = async (req, res) => {
         res.status(500).send('Error adding user');
     }
 };
-
 
 export const deleteUser = async (req, res) => {
     const { id } = req.params;
@@ -44,14 +44,27 @@ export const deleteUser = async (req, res) => {
         res.status(500).send('Error deleting user');
     }
 };
-export const updateUserStatus = async (req, res) => {
+
+export const updateUserActiveStatus = async (req, res) => {
     const { id } = req.params;
     const { isActive } = req.body;
     try {
-        const updatedUser = await updateUserById(id, { isActive });
-        res.status(200).json(updatedUser);
+        await updateUserStatus(id, isActive);
+        res.status(200).send('User active status updated successfully');
     } catch (error) {
-        console.error('Error updating user status:', error);
-        res.status(500).send('Error updating user status');
+        console.error('Error updating user active status:', error);
+        res.status(500).send('Error updating user active status');
+    }
+};
+
+export const updateUserSetdownStatus = async (req, res) => {
+    const { id } = req.params;
+    const { IsSetdown } = req.body;
+    try {
+        await updateUserSetdown(id, IsSetdown);
+        res.status(200).send('User setdown status updated successfully');
+    } catch (error) {
+        console.error('Error updating user setdown status:', error);
+        res.status(500).send('Error updating user setdown status');
     }
 };

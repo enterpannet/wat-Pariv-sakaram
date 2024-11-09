@@ -20,4 +20,5 @@ model User {
     phoneNumber       String
     chronicIllness    String?
     isActive          Boolean @default(false)
+    IsSetdown         Boolean @default(false)
 }

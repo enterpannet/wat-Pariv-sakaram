@@ -23,3 +23,10 @@ export const updateUserById = async (id, data) => {
         data,
     });
 };
+
+export const updateUserSetdown = async (id, IsSetdown) => {
+    return await prisma.user.update({
+        where: { id: parseInt(id) },
+        data: { IsSetdown }
+    });
+};
