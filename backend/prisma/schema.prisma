@@ -13,11 +13,11 @@ model User {
     id                Int     @id @default(autoincrement())
     name              String
     lastName          String
-    age               String
-    monasticYears     String?
+    age               Int
+    monasticYears     Int?
     templeAffiliation String
     province          String
     phoneNumber       String
     chronicIllness    String?
-    isActive          Boolean
+    isActive          Boolean @default(false)
 }

@@ -1,4 +1,4 @@
-import { getAllUsers, addUser, deleteUserById } from '../services/userService.js';
+import { getAllUsers, addUser, deleteUserById, updateUserById } from '../services/userService.js';
 
 export const getUsers = async (req, res) => {
     try {
