@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import RegisterForm from './components/RegisterForm';
 import UserTable from './components/UserTable';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function App() {
@@ -46,10 +48,12 @@ function App() {
     };
 
     return (
-        <div className="container mx-auto p-4">
-            <RegisterForm addUser={addUser} />
-            {/* <UserTable users={users} deleteUser={deleteUser} /> */}
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<RegisterForm addUser={addUser} />} />
+                <Route path="/view" element={<UserTable users={users} deleteUser={deleteUser} />} />
+            </Routes>
+        </Router>
     );
 }
 
