@@ -63,7 +63,7 @@ const testModal=()=>{
                     </div>
                 </div>
             )}
-            <button onClick={()=>testModal()}>XXX</button>
+            {/* <button onClick={()=>testModal()}>XXX</button> */}
             <div className="flex flex-col justify-center items-center w-full min-h-screen mx-auto">
                 <p className='text-lg'>ลงทะเบียนพระปริวาส วัดหนองขนาก ประจำปี พ.ศ. 2567</p>
                 <p>ระหว่างวันที่ 10 - 19 พ.ย. 2567</p>

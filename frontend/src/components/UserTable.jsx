@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { FaSort } from 'react-icons/fa';
 
 function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus }) {
     const [sortOrder, setSortOrder] = useState(true); // true for ascending, false for descending
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 10;
+
+    useEffect(() => {
+        handleSort('monasticYears'); // Sort by 'monasticYears' when the component mounts
+    }, []);
 
     const handleSort = (key) => {
         users.sort((a, b) => {
@@ -25,6 +31,24 @@ function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus 
             pdf.addImage(imgData, 'PNG', 10, 10);
             pdf.save('user-table.pdf');
         });
+    };
+
+    // Pagination logic
+    const totalPages = Math.ceil(users.length / usersPerPage);
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
     };
 
     const totalUsers = users.length;
@@ -55,9 +79,9 @@ function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus 
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((user, index) => (
+                    {currentUsers.map((user, index) => (
                         <tr key={user.id} className="hover:bg-gray-100">
-                            <td className="p-2 border">{index + 1}</td>
+                            <td className="p-2 border">{indexOfFirstUser + index + 1}</td>
                             <td className="p-2 border">{user.name}</td>
                             <td className="p-2 border">{user.lastName}</td>
                             <td className="p-2 border">{user.age}</td>
@@ -85,6 +109,23 @@ function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus 
                     ))}
                 </tbody>
             </table>
+            <div className="flex justify-between mt-4">
+                <button 
+                    onClick={handlePrevPage} 
+                    disabled={currentPage === 1} 
+                    className="bg-gray-300 px-4 py-2 rounded disabled:opacity-50"
+                >
+                    Previous
+                </button>
+                <span>Page {currentPage} of {totalPages}</span>
+                <button 
+                    onClick={handleNextPage} 
+                    disabled={currentPage === totalPages} 
+                    className="bg-gray-300 px-4 py-2 rounded disabled:opacity-50"
+                >
+                    Next
+                </button>
+            </div>
             <button onClick={exportToPDF} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Export to PDF</button>
         </div>
     );
