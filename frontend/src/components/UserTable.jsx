@@ -30,12 +30,14 @@ function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus 
     const totalUsers = users.length;
     const activeUsers = users.filter(user => user.isActive).length;
     const inactiveUsers = totalUsers - activeUsers;
+    const setDownUsers = users.filter(user => user.IsSetdown).length
+    const inSetDownUsers = totalUsers - setDownUsers
 
     return (
         <div className="mt-8 bg-white p-4 rounded shadow-md">
             <h2 className="text-xl font-bold mb-4">รายชื่อพระปริวาสกรรม</h2>
             <p className='flex justify-center items-center text-xl'>จำนวนพระปริวาสทั้งหมด : {totalUsers} | จำนวนที่สวดแล้ว : {activeUsers} | จำนวนที่ยังไม่ได้สวด: {inactiveUsers}</p>
-
+            <p className='flex justify-center items-center text-xl'>จำนวนที่สวดแล้ว : {setDownUsers} | จำนวนที่ยังไม่ได้สวด: {inSetDownUsers}</p>
             <table id="user-table" className="w-full border-collapse border border-gray-300">
                 <thead>
                     <tr className="bg-gray-200">
