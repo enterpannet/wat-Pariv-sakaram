@@ -8,9 +8,17 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost' // URL ของ frontend
+}));
 app.use(bodyParser.json());
-app.use('/api/users', userRoutes);
+
+// เพิ่ม route สำหรับ '/'
+app.get('/', (req, res) => {
+    res.send('สวัสดี');
+});
+
+app.use('/api/v1', userRoutes);
 
 const PORT = 5000;
 app.listen(PORT, () => {

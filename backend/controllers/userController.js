@@ -23,6 +23,8 @@ export const createUser = async (req, res) => {
             phoneNumber,
             chronicIllness: chronicIllness || null,
         });
+        console.log(newUser);
+
         res.status(201).json(newUser);
     } catch (error) {
         console.error('Error adding user:', error);

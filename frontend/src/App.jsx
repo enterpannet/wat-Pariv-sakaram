@@ -12,7 +12,7 @@ function App() {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/users');
+            const response = await axios.get('http://localhost:5000/api/v1/users');
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -21,7 +21,7 @@ function App() {
 
     const addUser = async (newUser) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/users', newUser, {
+            const response = await axios.post('http://localhost:5000/api/v1/users', newUser, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -36,7 +36,7 @@ function App() {
 
     const deleteUser = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:5000/api/users/${id}`);
+            const response = await axios.delete(`http://localhost:5000/api/v1/users/${id}`);
             if (response.status === 200) {
                 fetchUsers();
             }
