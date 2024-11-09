@@ -17,7 +17,7 @@ export const deleteUserById = async (id) => {
         where: { id: parseInt(id) },
     });
 };
-export const updateUserById = async (id, data) => {
+export const updateUserStatus = async (id, data) => {
     return await prisma.user.update({
         where: { id: parseInt(id) },
         data,
