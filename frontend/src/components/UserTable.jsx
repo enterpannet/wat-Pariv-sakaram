@@ -46,8 +46,8 @@ function UserTable({ users, deleteUser }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((user, index) => (
-                        <tr key={index} className="hover:bg-gray-100">
+                    {users.map((user) => (
+                        <tr key={user.id} className="hover:bg-gray-100">
                             <td className="p-2 border">{user.name}</td>
                             <td className="p-2 border">{user.lastName}</td>
                             <td className="p-2 border">{user.age}</td>
@@ -58,7 +58,7 @@ function UserTable({ users, deleteUser }) {
                             <td className="p-2 border">{user.chronicIllness}</td>
                             <td className="p-2 border">
                                 <button className="bg-yellow-500 text-white px-2 py-1 rounded mr-2">Edit</button>
-                                <button onClick={() => deleteUser(index)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                                <button onClick={() => deleteUser(user.id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                             </td>
                         </tr>
                     ))}
