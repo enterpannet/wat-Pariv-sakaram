@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { useState } from 'react';
 
-function UserTable({ users, deleteUser }) {
+function UserTable({ users, deleteUser, toggleActiveStatus }) {
     const [sortOrder, setSortOrder] = useState(true); // true for ascending, false for descending
 
     const handleSort = (key) => {
@@ -27,9 +26,14 @@ function UserTable({ users, deleteUser }) {
         });
     };
 
+    const totalUsers = users.length;
+    const activeUsers = users.filter(user => user.isActive).length;
+    const inactiveUsers = totalUsers - activeUsers;
+
     return (
         <div className="mt-8 bg-white p-4 rounded shadow-md">
             <h2 className="text-xl font-bold mb-4">Registered Users</h2>
+            <p>Total: {totalUsers} | Active: {activeUsers} | Inactive: {inactiveUsers}</p>
             <button onClick={exportToPDF} className="mb-4 bg-blue-500 text-white px-4 py-2 rounded">Export to PDF</button>
             <table id="user-table" className="w-full border-collapse border border-gray-300">
                 <thead>
@@ -57,7 +61,12 @@ function UserTable({ users, deleteUser }) {
                             <td className="p-2 border">{user.phoneNumber}</td>
                             <td className="p-2 border">{user.chronicIllness}</td>
                             <td className="p-2 border">
-                                <button className="bg-yellow-500 text-white px-2 py-1 rounded mr-2">Edit</button>
+                                <button 
+                                    onClick={() => toggleActiveStatus(user.id)} 
+                                    className={`px-2 py-1 rounded mr-2 ${user.isActive ? 'bg-green-500' : 'bg-yellow-500'} text-white`}
+                                >
+                                    {user.isActive ? 'Deactivate' : 'Activate'}
+                                </button>
                                 <button onClick={() => deleteUser(user.id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                             </td>
                         </tr>

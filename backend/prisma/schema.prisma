@@ -19,4 +19,5 @@ model User {
     province          String
     phoneNumber       String
     chronicIllness    String?
+    isActive          Boolean
 }
