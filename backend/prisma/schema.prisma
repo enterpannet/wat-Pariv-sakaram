@@ -14,7 +14,7 @@ model User {
     name              String
     lastName          String
     age               String
-    monasticYears     String?
+    monasticYears     String
     templeAffiliation String
     province          String
     phoneNumber       String

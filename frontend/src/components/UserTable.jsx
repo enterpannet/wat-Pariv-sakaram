@@ -6,25 +6,30 @@ import { FaSort } from 'react-icons/fa';
 function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus }) {
     const [sortOrder, setSortOrder] = useState(true); // true for ascending, false for descending
     const [currentPage, setCurrentPage] = useState(1);
+    const [sortedUsers, setSortedUsers] = useState(users); // ใช้ sortedUsers เพื่อเก็บข้อมูลที่ถูกเรียงแล้ว
     const usersPerPage = 10;
 
     useEffect(() => {
-        handleSort('monasticYears'); // Sort by 'monasticYears' when the component mounts
-    }, []);
+        setSortedUsers(users); // เมื่อ component mount, กำหนด sortedUsers ให้เป็น users เริ่มต้น
+    }, [users]);
 
     const handleSort = (key) => {
-        const sortedUsers = [...users].sort((a, b) => {
-            if (typeof a[key] === 'number' && typeof b[key] === 'number') {
-                return sortOrder ? a[key] - b[key] : b[key] - a[key];
+        const sorted = [...users].sort((a, b) => {
+            // แปลงค่าให้เป็นตัวเลขก่อนทำการเปรียบเทียบ ถ้าเป็นตัวเลข
+            const aValue = typeof a[key] === 'number' ? a[key] : parseFloat(a[key]);
+            const bValue = typeof b[key] === 'number' ? b[key] : parseFloat(b[key]);
+    
+            if (!isNaN(aValue) && !isNaN(bValue)) {
+                return sortOrder ? aValue - bValue : bValue - aValue;
             } else {
-                // สำหรับกรณีที่ไม่ใช่ตัวเลข (เช่น สตริง) ให้ใช้การเปรียบเทียบสตริงปกติ
+                // ถ้าค่าที่เปรียบเทียบไม่ใช่ตัวเลข ให้เปรียบเทียบตามตัวอักษร
                 return sortOrder ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
             }
         });
     
-        setSortOrder(!sortOrder);
-        setCurrentPage(1); // Reset to first page when sorting
-        return sortedUsers;
+        setSortedUsers(sorted); // อัพเดต sortedUsers
+        setSortOrder(!sortOrder); // สลับการเรียง
+        setCurrentPage(1); // รีเซ็ตหน้าเมื่อมีการเรียง
     };
     
 
@@ -39,10 +44,10 @@ function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus 
     };
 
     // Pagination logic
-    const totalPages = Math.ceil(users.length / usersPerPage);
+    const totalPages = Math.ceil(sortedUsers.length / usersPerPage);
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+    const currentUsers = sortedUsers.slice(indexOfFirstUser, indexOfLastUser);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
