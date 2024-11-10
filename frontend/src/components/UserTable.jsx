@@ -13,15 +13,20 @@ function UserTable({ users, deleteUser, toggleActiveStatus, toggleSetdownStatus 
     }, []);
 
     const handleSort = (key) => {
-        users.sort((a, b) => {
-            if (sortOrder) {
-                return a[key] > b[key] ? 1 : -1;
+        const sortedUsers = [...users].sort((a, b) => {
+            if (typeof a[key] === 'number' && typeof b[key] === 'number') {
+                return sortOrder ? a[key] - b[key] : b[key] - a[key];
             } else {
-                return a[key] < b[key] ? 1 : -1;
+                // สำหรับกรณีที่ไม่ใช่ตัวเลข (เช่น สตริง) ให้ใช้การเปรียบเทียบสตริงปกติ
+                return sortOrder ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
             }
         });
+    
         setSortOrder(!sortOrder);
+        setCurrentPage(1); // Reset to first page when sorting
+        return sortedUsers;
     };
+    
 
     const exportToPDF = () => {
         const input = document.getElementById('user-table');
