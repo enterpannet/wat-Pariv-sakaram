@@ -22,3 +22,16 @@ model User {
     isActive          Boolean @default(false)
     IsSetdown         Boolean @default(false)
 }
+model Income {
+  id          Int      @id @default(autoincrement())
+  amount      Float
+  description String
+  date        DateTime @default(now())
+}
+
+model Expense {
+  id          Int      @id @default(autoincrement())
+  amount      Float
+  description String
+  date        DateTime @default(now())
+}

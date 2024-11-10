@@ -24,7 +24,7 @@ function RegisterForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://210.246.215.231:5000/api/v1/users', formData);
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users`, formData);
             setPopupMessage('ลงทะเบียนสำเร็จแล้ว!');
             setIsSuccess(true);
         } catch (error) {

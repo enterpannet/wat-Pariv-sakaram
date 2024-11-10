@@ -3,7 +3,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
-
+import incomeRoutes from './routes/incomeRoutes.js';
+import expenseRoutes from './routes/expenseRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -17,7 +18,8 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
     res.send('สวัสดี');
 });
-
+app.use('/api/income', incomeRoutes);  // เส้นทางสำหรับ income
+app.use('/api/expense', expenseRoutes);
 app.use('/api/v1', userRoutes);
 
 const PORT = 5000;

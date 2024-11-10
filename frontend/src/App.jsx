@@ -4,16 +4,33 @@ import RegisterForm from './components/RegisterForm';
 import UserTable from './components/UserTable';
 import axios from 'axios';
 
+import Income from './components/Income';
+import Expense from './components/Expense';
+import Summary from './components/Summary';
+import { getIncomes, getExpenses } from './services/apiService';
 function App() {
     const [users, setUsers] = useState([]);
-
+    const [income, setIncome] = useState([]);
+    const [expense, setExpense] = useState([]);
+  
+    useEffect(() => {
+      // ดึงข้อมูลรายรับและรายจ่ายจาก API เมื่อโหลดหน้าเว็บ
+      const fetchData = async () => {
+        const incomes = await getIncomes();
+        const expenses = await getExpenses();
+        setIncome(incomes);
+        setExpense(expenses);
+      };
+  
+      fetchData();
+    }, []);
     useEffect(() => {
         fetchUsers();
     }, []);
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://210.246.215.231:5000/api/v1/users');
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/users`);
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -22,7 +39,7 @@ function App() {
 
     const addUser = async (newUser) => {
         try {
-            const response = await axios.post('http://210.246.215.231:5000/api/v1/users', newUser, {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users`, newUser, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -37,7 +54,7 @@ function App() {
 
     const deleteUser = async (id) => {
         try {
-            const response = await axios.delete(`http://210.246.215.231:5000/api/v1/users/${id}`);
+            const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/v1/users/${id}`);
             if (response.status === 200) {
                 fetchUsers();
             }
@@ -47,7 +64,7 @@ function App() {
     };
     const toggleActiveStatus = async (id) => {
         try {
-            await axios.patch(`http://210.246.215.231:5000/api/v1/users/${id}/active-status`, {
+            await axios.patch(`${import.meta.env.VITE_API_URL}/api/v1/users/${id}/active-status`, {
                 isActive: !users.find(user => user.id === id).isActive,
             });
             // Refresh the user list after update, without altering the order
@@ -61,7 +78,7 @@ function App() {
     
     const toggleSetdownStatus = async (id) => {
         try {
-            await axios.patch(`http://210.246.215.231:5000/api/v1/users/${id}/setdown-status`, {
+            await axios.patch(`${import.meta.env.VITE_API_URL}/api/v1/users/${id}/setdown-status`, {
                 IsSetdown: !users.find(user => user.id === id).IsSetdown,
             });
             // Refresh the user list after update, without altering the order
@@ -89,6 +106,11 @@ function App() {
                         />
                     } 
                 />
+                <Route 
+                path='/income' 
+                element={
+                    <Income />
+                } />
             </Routes>
         </Router>
     );
