@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+
 const prisma = new PrismaClient();
 
 // ฟังก์ชันเพื่อดึงข้อมูลรายจ่ายทั้งหมดจากฐานข้อมูล
@@ -16,4 +17,22 @@ const createExpense = async (amount, description) => {
     });
 };
 
-export { getAllExpenses, createExpense };
+// ฟังก์ชันเพื่อแก้ไขข้อมูลรายจ่าย
+const editExpense = async (id, amount, description) => {
+    return await prisma.expense.update({
+        where: { id },
+        data: {
+            amount,
+            description,
+        },
+    });
+};
+
+// ฟังก์ชันเพื่อลบข้อมูลรายจ่าย
+const deleteExpense = async (id) => {
+    return await prisma.expense.delete({
+        where: { id },
+    });
+};
+
+export { getAllExpenses, createExpense, editExpense, deleteExpense };

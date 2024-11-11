@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
     res.send('สวัสดี');
 });
 app.use('/api/income', incomeRoutes);  // เส้นทางสำหรับ income
-app.use('/api/expense', expenseRoutes);
+app.use('/api', expenseRoutes);
 app.use('/api/v1', userRoutes);
 
 const PORT = 5000;

@@ -1,12 +1,19 @@
-import { Router } from 'express';
-import * as expenseController from '../controllers/expenseController.js';
+// routes/expenseRoutes.js
+import express from 'express';
+import { getExpenses, addExpense, updateExpense, removeExpense } from '../controllers/expenseController';
 
-const router = Router();
+const router = express.Router();
 
-// เส้นทางสำหรับการดึงรายจ่ายทั้งหมด
-router.get('/', expenseController.getExpenses);
+// Route to get all expenses
+router.get('/expenses', getExpenses);
 
-// เส้นทางสำหรับการเพิ่มรายจ่าย
-router.post('/', expenseController.addExpense);
+// Route to add a new expense
+router.post('/expenses', addExpense);
+
+// Route to update an existing expense
+router.put('/expenses/:id', updateExpense);
+
+// Route to delete an expense
+router.delete('/expenses/:id', removeExpense);
 
 export default router;
