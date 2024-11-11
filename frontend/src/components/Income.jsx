@@ -34,7 +34,7 @@ const Income = ({ setIncome }) => {
     if (validate()) {
       const { amount, description } = newIncome;
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/income`, { amount, description });
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/income`, { amount, description });
         setIncome((prevIncome) => [...prevIncome, response.data]);
         setNewIncome({ amount: 0, description: '' });
 

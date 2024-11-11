@@ -34,7 +34,7 @@ const Expense = ({ setExpense }) => {
     if (validate()) {
       const { amount, description } = newExpense;
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/expenses`, { amount, description });
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/expenses`, { amount, description });
         setExpense((prevExpense) => [...prevExpense, response.data]);
         setNewExpense({ amount: 0, description: '' });
 
