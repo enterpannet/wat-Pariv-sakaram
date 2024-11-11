@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Tabs, Table, Pagination } from 'antd';
+import { Tabs, Table, Pagination, Button, Modal, Input } from 'antd';
 
 const { TabPane } = Tabs;
 
-const Summary = ({ income, expense }) => {
+const Summary = ({ income, expense, onEdit, onDelete }) => {
   // คำนวณคงเหลือ
   const totalIncome = income.reduce((acc, curr) => acc + curr.amount, 0);
   const totalExpense = expense.reduce((acc, curr) => acc + curr.amount, 0);
@@ -12,13 +12,35 @@ const Summary = ({ income, expense }) => {
   // ฟังก์ชันแปลงวันที่และเวลาให้เป็นรูปแบบที่อ่านง่าย
   const formatDate = (date) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false };
-    return new Date(date).toLocaleString('th-TH', options); // ภาษาไทย
+    return new Date(date).toLocaleString('th-TH', options);
   };
 
   // สถานะของ Pagination สำหรับรายรับและรายจ่าย
   const [currentIncomePage, setCurrentIncomePage] = useState(1);
   const [currentExpensePage, setCurrentExpensePage] = useState(1);
-  const itemsPerPage = 10; // จำนวนรายการที่จะแสดงในแต่ละหน้า
+  const itemsPerPage = 10;
+
+  // สถานะ Modal สำหรับการแก้ไขข้อมูล
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [editingRecord, setEditingRecord] = useState(null);
+  const [editingAmount, setEditingAmount] = useState(0);
+  const [editingDescription, setEditingDescription] = useState('');
+
+  const showEditModal = (record) => {
+    setEditingRecord(record);
+    setEditingAmount(record.amount);
+    setEditingDescription(record.description);
+    setIsEditModalVisible(true);
+  };
+
+  const handleEdit = () => {
+    onEdit({ ...editingRecord, amount: editingAmount, description: editingDescription });
+    setIsEditModalVisible(false);
+  };
+
+  const handleDelete = (record) => {
+    onDelete(record);
+  };
 
   // คำนวณตำแหน่งของข้อมูลที่จะแสดงในแต่ละหน้า
   const indexOfLastIncome = currentIncomePage * itemsPerPage;
@@ -29,17 +51,37 @@ const Summary = ({ income, expense }) => {
   const indexOfFirstExpense = indexOfLastExpense - itemsPerPage;
   const currentExpense = expense.slice(indexOfFirstExpense, indexOfLastExpense);
 
-  // Columns สำหรับ Table
+  // Columns สำหรับ Table รวมถึงปุ่ม ลบ และแก้ไข
   const incomeColumns = [
     { title: 'วันที่', dataIndex: 'date', key: 'date', render: (date) => formatDate(date) },
     { title: 'จำนวนเงิน', dataIndex: 'amount', key: 'amount', render: (amount) => `${amount} บาท` },
-    { title: 'รายละเอียด', dataIndex: 'description', key: 'description' }
+    { title: 'รายละเอียด', dataIndex: 'description', key: 'description' },
+    {
+      title: 'การจัดการ',
+      key: 'action',
+      render: (_, record) => (
+        <>
+          <Button type="link" onClick={() => showEditModal(record)}>แก้ไข</Button>
+          <Button type="link" danger onClick={() => handleDelete(record)}>ลบ</Button>
+        </>
+      ),
+    },
   ];
 
   const expenseColumns = [
     { title: 'วันที่', dataIndex: 'date', key: 'date', render: (date) => formatDate(date) },
     { title: 'จำนวนเงิน', dataIndex: 'amount', key: 'amount', render: (amount) => `${amount} บาท` },
-    { title: 'รายละเอียด', dataIndex: 'description', key: 'description' }
+    { title: 'รายละเอียด', dataIndex: 'description', key: 'description' },
+    {
+      title: 'การจัดการ',
+      key: 'action',
+      render: (_, record) => (
+        <>
+          <Button type="link" onClick={() => showEditModal(record)}>แก้ไข</Button>
+          <Button type="link" danger onClick={() => handleDelete(record)}>ลบ</Button>
+        </>
+      ),
+    },
   ];
 
   const items = [
@@ -117,8 +159,28 @@ const Summary = ({ income, expense }) => {
         defaultActiveKey="1"
         centered
         items={items}
-        className="sm:text-sm lg:text-base" // ปรับขนาดข้อความตามขนาดหน้าจอ
+        className="sm:text-sm lg:text-base"
       />
+
+      {/* Modal แก้ไขข้อมูล */}
+      <Modal
+        title="แก้ไขรายการ"
+        visible={isEditModalVisible}
+        onOk={handleEdit}
+        onCancel={() => setIsEditModalVisible(false)}
+      >
+        <label>จำนวนเงิน:</label>
+        <Input
+          type="number"
+          value={editingAmount}
+          onChange={(e) => setEditingAmount(parseFloat(e.target.value))}
+        />
+        <label>รายละเอียด:</label>
+        <Input
+          value={editingDescription}
+          onChange={(e) => setEditingDescription(e.target.value)}
+        />
+      </Modal>
     </div>
   );
 };
