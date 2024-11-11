@@ -24,10 +24,10 @@ const addExpense = async (req, res) => {
 
 // ฟังก์ชันเพื่อแก้ไขข้อมูลรายจ่าย
 const updateExpense = async (req, res) => {
-    const { id } = req.params;
+    const id = parseInt(req.params.id); // Parse ID to integer
     const { amount, description } = req.body;
     try {
-        const updatedExpense = await editExpense(parseInt(id), amount, description);
+        const updatedExpense = await editExpense(id, amount, description);
         res.status(200).json(updatedExpense);
     } catch (error) {
         res.status(500).json({ error: 'ไม่สามารถแก้ไขข้อมูลรายจ่ายได้' });
@@ -36,10 +36,10 @@ const updateExpense = async (req, res) => {
 
 // ฟังก์ชันเพื่อลบข้อมูลรายจ่าย
 const removeExpense = async (req, res) => {
-    const { id } = req.params;
+    const id = parseInt(req.params.id);
     try {
-        const deletedExpense = await deleteExpense(parseInt(id));
-        res.status(200).json(deletedExpense);
+        await deleteExpense(id);
+        res.json({ message: 'Expense deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: 'ไม่สามารถลบข้อมูลรายจ่ายได้' });
     }

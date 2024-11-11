@@ -16,18 +16,16 @@ const createIncome = async (amount, description) => {
   });
 };
 
-// ฟังก์ชันเพื่อแก้ไขข้อมูลรายรับ
 const updateIncome = async (id, amount, description) => {
   return await prisma.income.update({
-    where: { id },
+    where: { id: parseInt(id) },
     data: { amount, description },
   });
 };
 
-// ฟังก์ชันเพื่อลบข้อมูลรายรับ
 const deleteIncome = async (id) => {
   return await prisma.income.delete({
-    where: { id },
+    where: { id: parseInt(id) },
   });
 };
 

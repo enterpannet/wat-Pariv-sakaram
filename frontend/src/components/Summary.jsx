@@ -108,7 +108,7 @@ const Summary = () => {
       key: 'action',
       render: (_, record) => (
         <>
-          <Button type="link" onClick={() => showEditModal({ ...record, type: 'expense' })}>แก้ไข</Button>
+          <Button type="link" onClick={() => showEditModal({ ...record, type: 'expenses' })}>แก้ไข</Button>
           <Button type="link" danger onClick={() => handleDeleteExpense(record.id)}>ลบ</Button>
         </>
       ),

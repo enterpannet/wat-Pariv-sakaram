@@ -5,12 +5,13 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import incomeRoutes from './routes/incomeRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
+import donationRoutes from './routes/donationRoutes.js'
 dotenv.config();
 
 const app = express();
 
 app.use(cors({
-    origin: ['http://210.246.215.231', 'http://localhost:3000', 'https://www.wnkn.org', 'https://wnkn.org','http://localhost:5173']
+    origin: ['http://210.246.215.231', 'http://localhost:3000', 'https://www.wnkn.org', 'https://wnkn.org', 'http://localhost:5173']
 }));
 app.use(bodyParser.json());
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 app.use('/income', incomeRoutes);  // เส้นทางสำหรับ income
 app.use('/expenses', expenseRoutes);
 app.use('/users', userRoutes);
+app.use('/donations', donationRoutes)
 
 const PORT = 5000;
 app.listen(PORT, '0.0.0.0', () => {

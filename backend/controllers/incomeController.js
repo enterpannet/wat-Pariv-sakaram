@@ -21,9 +21,8 @@ const addIncome = async (req, res) => {
   }
 };
 
-// Controller สำหรับแก้ไขข้อมูลรายรับ
 const editIncome = async (req, res) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id); // Parse ID to integer
   const { amount, description } = req.body;
   try {
     const updatedIncome = await incomeService.updateIncome(id, amount, description);
@@ -33,9 +32,8 @@ const editIncome = async (req, res) => {
   }
 };
 
-// Controller สำหรับลบข้อมูลรายรับ
 const deleteIncome = async (req, res) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id); // Parse ID to integer
   try {
     await incomeService.deleteIncome(id);
     res.json({ message: 'Income deleted successfully' });

@@ -1,27 +1,28 @@
 // schema.prisma
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id                Int     @id @default(autoincrement())
-    name              String
-    lastName          String
-    age               String
-    monasticYears     String
-    templeAffiliation String
-    province          String
-    phoneNumber       String
-    chronicIllness    String?
-    isActive          Boolean @default(false)
-    IsSetdown         Boolean @default(false)
+  id                Int     @id @default(autoincrement())
+  name              String
+  lastName          String
+  age               String
+  monasticYears     String
+  templeAffiliation String
+  province          String
+  phoneNumber       String
+  chronicIllness    String?
+  isActive          Boolean @default(false)
+  IsSetdown         Boolean @default(false)
 }
+
 model Income {
   id          Int      @id @default(autoincrement())
   amount      Float
@@ -34,4 +35,13 @@ model Expense {
   amount      Float
   description String
   date        DateTime @default(now())
+}
+
+model Donation {
+  id        String   @id @default(uuid())
+  donorName String
+  address   String?
+  items     String?
+  amount    Float?
+  createdAt DateTime @default(now())
 }

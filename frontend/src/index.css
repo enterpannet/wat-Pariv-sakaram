@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* TailwindCSS classes for styling buttons */
+
+.nav-button {
+    @apply bg-blue-600 text-white font-semibold py-3 px-5 rounded-lg shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-300 ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+  
+  @media (min-width: 640px) {
+    .nav-button {
+      @apply text-lg;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .nav-button {
+      @apply text-xl;
+    }
+  }
+  

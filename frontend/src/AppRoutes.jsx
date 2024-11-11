@@ -9,35 +9,44 @@ import App from './App'
 
 import RootLayout from "./layout";
 import ErrorPage from "./error";
+import DonationForm from "./components/DonationForm";
+import DonationSummary from "./components/DonationSummary";
 
-import { addUser, deleteUser, toggleActiveStatus, toggleSetdownStatus } from './services/apiService';
-export const router =createBrowserRouter([
+export const router = createBrowserRouter([
     {
         element: <RootLayout />,
         errorElement: <ErrorPage />,
-        children:[
+        children: [
             {
                 path: "/",
                 element: <App />
             },
             {
-                path:"/register",
+                path: "/register",
                 element: <RegisterForm />
             },
             {
-                path:"/view",
-                element:<UserTable/>
+                path: "/view",
+                element: <UserTable />
             },
             {
-                path:"/income",
-                element:<Income/>
+                path: "/income",
+                element: <Income />
             }
-            ,{
-                path:"/expense",
-                element:<Expense/>
-            },{
-                path:"/summary",
-                element:<Summary/>
+            , {
+                path: "/expense",
+                element: <Expense />
+            }, {
+                path: "/summary",
+                element: <Summary />
+            },
+            {
+                path: "/donation",
+                element: <DonationForm />
+            },
+            {
+                path: "/summarydonation",
+                element: <DonationSummary />
             }
         ]
     }
