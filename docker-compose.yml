@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   backend:
     build:
@@ -11,18 +12,16 @@ services:
     networks:
       - app_network
 
-  frontend:
-    build:
-      context: ./frontend
-    container_name: react_app
-    ports:
-      - '3000:3000'
+  db:
+    image: postgres:15
     environment:
-      REACT_APP_BACKEND_URL: "http://express_server:5000"
+      POSTGRES_USER: watRoot
+      POSTGRES_PASSWORD: wat123546
+      POSTGRES_DB: wat
+    ports:
+      - '5432:5432'
     networks:
       - app_network
-    stdin_open: true
-    tty: true
 
 networks:
   app_network:
