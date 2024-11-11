@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: ['http://210.246.215.231', 'http://localhost:3000']
+    origin: ['http://210.246.215.231', 'http://localhost:3000','https://www.wnkn.org','https://wnkn.org']
 }));
 app.use(bodyParser.json());
 
