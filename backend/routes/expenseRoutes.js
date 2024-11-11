@@ -5,15 +5,15 @@ import { getExpenses, addExpense, updateExpense, removeExpense } from '../contro
 const router = express.Router();
 
 // Route to get all expenses
-router.get('/expenses', getExpenses);
+router.get('/', getExpenses);
 
 // Route to add a new expense
-router.post('/expenses', addExpense);
+router.post('/', addExpense);
 
 // Route to update an existing expense
-router.put('/expenses/:id', updateExpense);
+router.put('/:id', updateExpense);
 
 // Route to delete an expense
-router.delete('/expenses/:id', removeExpense);
+router.delete('/:id', removeExpense);
 
 export default router;

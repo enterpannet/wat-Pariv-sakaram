@@ -18,9 +18,9 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
     res.send('สวัสดี');
 });
-app.use('/v1/income', incomeRoutes);  // เส้นทางสำหรับ income
-app.use('/v1', expenseRoutes);
-app.use('/v1', userRoutes);
+app.use('/income', incomeRoutes);  // เส้นทางสำหรับ income
+app.use('/expenses', expenseRoutes);
+app.use('/users', userRoutes);
 
 const PORT = 5000;
 app.listen(PORT, '0.0.0.0', () => {

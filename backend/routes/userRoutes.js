@@ -3,10 +3,10 @@ import { getUsers, createUser, deleteUser, updateUserActiveStatus, updateUserSet
 
 const router = express.Router();
 
-router.get('/users', getUsers);
-router.post('/users', createUser);
-router.delete('/users/:id', deleteUser);
-router.patch('/users/:id/active-status', updateUserActiveStatus); // Route for updating active status
-router.patch('/users/:id/setdown-status', updateUserSetdownStatus); // Route for updating setdown status
+router.get('/', getUsers);
+router.post('/', createUser);
+router.delete('/:id', deleteUser);
+router.patch('/:id/active-status', updateUserActiveStatus); // Route for updating active status
+router.patch('/:id/setdown-status', updateUserSetdownStatus); // Route for updating setdown status
 
 export default router;
