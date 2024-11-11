@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const Income = ({ setIncome }) => {
+const Income = () => {
+  const [incomes, setIncomes] = useState([]); // ใช้สถานะภายในคอมโพเนนต์สำหรับจัดการรายรับ
   const [newIncome, setNewIncome] = useState({ amount: 0, description: '' });
   const [errors, setErrors] = useState({ amount: '', description: '' });
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [popupType, setPopupType] = useState('success'); // success or error
 
-  // ฟังก์ชันตรวจสอบ validation
   const validate = () => {
     let valid = true;
     const newErrors = { amount: '', description: '' };
@@ -27,7 +27,6 @@ const Income = ({ setIncome }) => {
     return valid;
   };
 
-  // ฟังก์ชันส่งข้อมูล
   const handleIncomeSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,17 +34,16 @@ const Income = ({ setIncome }) => {
       const { amount, description } = newIncome;
       try {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/income`, { amount, description });
-        setIncome((prevIncome) => [...prevIncome, response.data]);
+        
+        setIncomes((prevIncomes) => [...prevIncomes, response.data]); // อัปเดตรายรับในสถานะภายในคอมโพเนนต์
         setNewIncome({ amount: 0, description: '' });
 
-        // แสดง popup สำหรับความสำเร็จ
         setPopupMessage('บันทึกรายรับสำเร็จ!');
         setPopupType('success');
         setShowPopup(true);
       } catch (error) {
         console.error(error);
 
-        // แสดง popup สำหรับข้อผิดพลาด
         setPopupMessage('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
         setPopupType('error');
         setShowPopup(true);
@@ -53,7 +51,6 @@ const Income = ({ setIncome }) => {
     }
   };
 
-  // ฟังก์ชันปิด popup
   const closePopup = () => {
     setShowPopup(false);
   };
@@ -62,9 +59,7 @@ const Income = ({ setIncome }) => {
     <div className="max-w-lg mx-auto p-4">
       <h2 className="text-2xl font-semibold text-center mb-4">บันทึกรายรับ</h2>
 
-      {/* ฟอร์มบันทึกรายรับ */}
       <form onSubmit={handleIncomeSubmit} className="space-y-4">
-        {/* Amount Field */}
         <div>
           <label htmlFor="amount" className="block text-sm font-medium text-gray-700">จำนวนเงิน</label>
           <input
@@ -79,7 +74,6 @@ const Income = ({ setIncome }) => {
           {errors.amount && <p className="text-xs text-red-500">{errors.amount}</p>}
         </div>
 
-        {/* Description Field */}
         <div>
           <label htmlFor="description" className="block text-sm font-medium text-gray-700">รายละเอียด</label>
           <input
@@ -94,26 +88,18 @@ const Income = ({ setIncome }) => {
           {errors.description && <p className="text-xs text-red-500">{errors.description}</p>}
         </div>
 
-        {/* Submit Button */}
         <div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-          >
+          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
             Add Income
           </button>
         </div>
       </form>
 
-      {/* Popup */}
       {showPopup && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
           <div className={`p-4 rounded-md bg-${popupType === 'success' ? 'green' : 'red'}-500 text-white`}>
             <p className="text-center">{popupMessage}</p>
-            <button
-              onClick={closePopup}
-              className="mt-4 w-full py-2 rounded-md bg-white text-black"
-            >
+            <button onClick={closePopup} className="mt-4 w-full py-2 rounded-md bg-white text-black">
               OK
             </button>
           </div>

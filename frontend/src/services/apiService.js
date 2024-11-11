@@ -1,5 +1,4 @@
 import axios from 'axios';
-// ดึงข้อมูลรายรับจาก API
 export const getIncomes = async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/income`);
@@ -9,28 +8,81 @@ export const getIncomes = async () => {
     }
 };
 
-// Get all expenses
+// สร้างรายรับใหม่
+export const createIncome = async (amount, description) => {
+    try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/income`, { amount, description });
+        return response.data;
+    } catch (error) {
+        console.error("Error creating income:", error);
+        throw error;
+    }
+};
+
+// แก้ไขรายรับ
+export const editIncome = async (id, amount, description) => {
+    try {
+        const response = await axios.put(`${import.meta.env.VITE_API_URL}/income/${id}`, { amount, description });
+        return response.data;
+    } catch (error) {
+        console.error("Error editing income:", error);
+        throw error;
+    }
+};
+
+// ลบรายรับ
+export const deleteIncome = async (id) => {
+    try {
+        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/income/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting income:", error);
+        throw error;
+    }
+};
+
+// ดึงข้อมูลรายจ่ายทั้งหมด
 export const fetchExpenses = async () => {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/expenses`);
-    return response.data;
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/expenses`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching expenses:', error);
+        throw new Error('ไม่สามารถดึงข้อมูลรายจ่ายได้');
+    }
 };
 
-// Create a new expense
+// สร้างรายจ่ายใหม่
 export const createExpense = async (amount, description) => {
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/expenses`, { amount, description });
-    return response.data;
+    try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/expenses`, { amount, description });
+        return response.data;
+    } catch (error) {
+        console.error("Error creating expense:", error);
+        throw new Error('ไม่สามารถเพิ่มข้อมูลรายจ่ายได้');
+    }
 };
 
-// Edit an expense
+// แก้ไขรายจ่าย
 export const editExpense = async (id, amount, description) => {
-    const response = await axios.put(`${import.meta.env.VITE_API_URL}/expenses/${id}`, { amount, description });
-    return response.data;
+    try {
+        const response = await axios.put(`${import.meta.env.VITE_API_URL}/expenses/${id}`, { amount, description });
+        return response.data;
+    } catch (error) {
+        console.error("Error editing expense:", error);
+        throw new Error('ไม่สามารถแก้ไขข้อมูลรายจ่ายได้');
+    }
 };
 
-// Delete an expense
+// ลบรายจ่าย
 export const deleteExpense = async (id) => {
-    const response = await axios.delete(`${import.meta.env.VITE_API_URL}/expenses/${id}`);
-    return response.data;
+    try {
+        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/expenses/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting expense:", error);
+        throw new Error('ไม่สามารถลบข้อมูลรายจ่ายได้');
+    }
 };
 // apiService.js
 export const fetchUsers = async (setUsers) => {

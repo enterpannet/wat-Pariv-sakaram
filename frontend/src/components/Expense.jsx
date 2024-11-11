@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const Expense = ({ setExpense }) => {
+const Expense = () => {
+  const [expenses, setExpenses] = useState([]); // สถานะเก็บรายการรายจ่ายทั้งหมด
   const [newExpense, setNewExpense] = useState({ amount: 0, description: '' });
   const [errors, setErrors] = useState({ amount: '', description: '' });
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [popupType, setPopupType] = useState('success'); // success or error
 
-  // ฟังก์ชันตรวจสอบ validation
   const validate = () => {
     let valid = true;
     const newErrors = { amount: '', description: '' };
@@ -27,7 +27,6 @@ const Expense = ({ setExpense }) => {
     return valid;
   };
 
-  // ฟังก์ชันส่งข้อมูล
   const handleExpenseSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,17 +34,19 @@ const Expense = ({ setExpense }) => {
       const { amount, description } = newExpense;
       try {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/expenses`, { amount, description });
-        setExpense((prevExpense) => [...prevExpense, response.data]);
+        
+        // เพิ่มรายการใหม่ใน expenses
+        setExpenses((prevExpenses) => [...prevExpenses, response.data]);
         setNewExpense({ amount: 0, description: '' });
 
-        // แสดง popup สำหรับความสำเร็จ
+        // แสดง popup สำเร็จ
         setPopupMessage('บันทึกรายจ่ายสำเร็จ!');
         setPopupType('success');
         setShowPopup(true);
       } catch (error) {
         console.error(error);
 
-        // แสดง popup สำหรับข้อผิดพลาด
+        // แสดง popup ข้อผิดพลาด
         setPopupMessage('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
         setPopupType('error');
         setShowPopup(true);
@@ -53,7 +54,6 @@ const Expense = ({ setExpense }) => {
     }
   };
 
-  // ฟังก์ชันปิด popup
   const closePopup = () => {
     setShowPopup(false);
   };
@@ -62,9 +62,7 @@ const Expense = ({ setExpense }) => {
     <div className="max-w-lg mx-auto p-4">
       <h2 className="text-2xl font-semibold text-center mb-4">บันทึกรายจ่าย</h2>
 
-      {/* ฟอร์มบันทึกรายจ่าย */}
       <form onSubmit={handleExpenseSubmit} className="space-y-4">
-        {/* Amount Field */}
         <div>
           <label htmlFor="amount" className="block text-sm font-medium text-gray-700">จำนวนเงิน</label>
           <input
@@ -79,7 +77,6 @@ const Expense = ({ setExpense }) => {
           {errors.amount && <p className="text-xs text-red-500">{errors.amount}</p>}
         </div>
 
-        {/* Description Field */}
         <div>
           <label htmlFor="description" className="block text-sm font-medium text-gray-700">รายละเอียด</label>
           <input
@@ -94,7 +91,6 @@ const Expense = ({ setExpense }) => {
           {errors.description && <p className="text-xs text-red-500">{errors.description}</p>}
         </div>
 
-        {/* Submit Button */}
         <div>
           <button
             type="submit"
@@ -105,7 +101,6 @@ const Expense = ({ setExpense }) => {
         </div>
       </form>
 
-      {/* Popup */}
       {showPopup && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
           <div className={`p-4 rounded-md bg-${popupType === 'success' ? 'green' : 'red'}-500 text-white`}>

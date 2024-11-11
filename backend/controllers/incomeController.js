@@ -21,4 +21,27 @@ const addIncome = async (req, res) => {
   }
 };
 
-export { getIncomes, addIncome };
+// Controller สำหรับแก้ไขข้อมูลรายรับ
+const editIncome = async (req, res) => {
+  const { id } = req.params;
+  const { amount, description } = req.body;
+  try {
+    const updatedIncome = await incomeService.updateIncome(id, amount, description);
+    res.json(updatedIncome);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating income' });
+  }
+};
+
+// Controller สำหรับลบข้อมูลรายรับ
+const deleteIncome = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await incomeService.deleteIncome(id);
+    res.json({ message: 'Income deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error deleting income' });
+  }
+};
+
+export { getIncomes, addIncome, editIncome, deleteIncome };
