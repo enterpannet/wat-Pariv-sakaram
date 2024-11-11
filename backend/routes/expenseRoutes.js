@@ -1,6 +1,6 @@
 // routes/expenseRoutes.js
 import express from 'express';
-import { getExpenses, addExpense, updateExpense, removeExpense } from '../controllers/expenseController';
+import { getExpenses, addExpense, updateExpense, removeExpense } from '../controllers/expenseController.js';
 
 const router = express.Router();
 

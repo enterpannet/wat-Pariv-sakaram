@@ -1,5 +1,5 @@
 // controllers/expenseController.js
-import { editExpense, deleteExpense, getAllExpenses, createExpense } from '../services/expenseService';
+import { editExpense, deleteExpense, getAllExpenses, createExpense } from '../services/expenseService.js';
 
 // ฟังก์ชันเพื่อดึงข้อมูลรายจ่ายทั้งหมด
 const getExpenses = async (req, res) => {
