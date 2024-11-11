@@ -11,11 +11,14 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Install PM2 globally
-RUN npm install pm2 -g
+# Build the app for production
+RUN npm run build
+
+# Install 'serve' to serve the production build
+RUN npm install -g serve
 
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Use PM2 to run the Vite dev server
-CMD ["pm2-runtime", "npm", "--", "run", "dev"]
+# Use 'serve' to serve the production build
+CMD ["serve", "-s", "dist", "-l", "3000"]
