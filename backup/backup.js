@@ -14,7 +14,11 @@ const BACKUP_DIR = process.env.BACKUP_DIR || './backups';
 const GOOGLE_DRIVE_FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID;
 const GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 // ตั้งค่า Google Drive API
-
+const auth = new google.auth.GoogleAuth({
+    keyFile: `${GOOGLE_APPLICATION_CREDENTIALS}`,
+    scopes: ['https://www.googleapis.com/auth/drive'],
+});
+const drive = google.drive({ version: 'v3', auth });
 
 // ฟังก์ชันสำหรับ backup
 function backupDatabase() {
@@ -34,31 +38,39 @@ function backupDatabase() {
             return;
         }
         console.log(`Backup successful: ${backupPath}`);
-        testGoogleDriveUpload(backupPath, backupFileName);
+        uploadToGoogleDrive(backupPath, backupFileName);
     });
 }
 
 // ฟังก์ชันอัปโหลดไฟล์ไป Google Drive
-async function testGoogleDriveUpload() {
-    const auth = new google.auth.GoogleAuth({
-        keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-        scopes: ['https://www.googleapis.com/auth/drive'],
-    });
-    const drive = google.drive({ version: 'v3', auth });
+async function uploadToGoogleDrive(filePath, fileName) {
     try {
-        const response = await drive.files.list({
-            pageSize: 10,
-            fields: 'files(id, name)',
+        const fileMetadata = {
+            name: fileName,
+            parents: [GOOGLE_DRIVE_FOLDER_ID],
+        };
+        const media = {
+            mimeType: 'application/octet-stream',
+            body: fs.createReadStream(filePath),
+        };
+
+        const response = await drive.files.create({
+            resource: fileMetadata,
+            media: media,
+            fields: 'id',
         });
-        console.log('Connected to Google Drive. Files:', response.data.files);
+
+        console.log(`File uploaded successfully, File ID: ${response.data.id}`);
+        fs.unlinkSync(filePath); // ลบไฟล์หลังจากอัปโหลดสำเร็จ
     } catch (error) {
-        console.error('Error connecting to Google Drive:', error.message);
+        console.error(`Error uploading file to Google Drive: ${error.message}`);
     }
 }
-// ตั้ง cron job ให้ทำงานทุกวันตอนเที่ยงคืน
-cron.schedule('59 0 * * *', backupDatabase, {
-    scheduled: true,
-    timezone: 'Asia/Bangkok',
-});
 
+// ตั้ง cron job ให้ทำงานทุกวันตอนเที่ยงคืน
+// cron.schedule('30 0 * * *', backupDatabase, {
+//     scheduled: true,
+//     timezone: 'Asia/Bangkok',
+// });
+backupDatabase()
 console.log('Database backup and upload to Google Drive scheduled to run daily at midnight.');
