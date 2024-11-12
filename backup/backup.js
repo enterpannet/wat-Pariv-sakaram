@@ -45,6 +45,8 @@ function backupDatabase() {
 // ฟังก์ชันอัปโหลดไฟล์ไป Google Drive
 async function uploadToGoogleDrive(filePath, fileName) {
     try {
+        console.log("Starting file upload...");
+
         const fileMetadata = {
             name: fileName,
             parents: [GOOGLE_DRIVE_FOLDER_ID],
@@ -61,14 +63,13 @@ async function uploadToGoogleDrive(filePath, fileName) {
         });
 
         console.log(`File uploaded successfully, File ID: ${response.data.id}`);
-        
-        // List files in the folder to confirm the upload
+
         const files = await drive.files.list({
             q: `'${GOOGLE_DRIVE_FOLDER_ID}' in parents`,
             fields: 'files(id, name)',
         });
 
-        console.log('Files in Drive:');
+        console.log('Files in Drive after upload:');
         files.data.files.forEach(file => {
             console.log(`- ${file.name} (ID: ${file.id})`);
         });
