@@ -45,20 +45,25 @@ function backupDatabase() {
 // ฟังก์ชันอัปโหลดไฟล์ไป Google Drive
 async function uploadToGoogleDrive(filePath, fileName) {
     try {
+        console.log(1);
+
         const fileMetadata = {
             name: fileName,
             parents: [GOOGLE_DRIVE_FOLDER_ID],
         };
+        console.log(fileMetadata);
         const media = {
             mimeType: 'application/octet-stream',
             body: fs.createReadStream(filePath),
         };
+        console.log(media);
 
-        const response = await drive.files.create({
+        const response = drive.files.create({
             resource: fileMetadata,
             media: media,
             fields: 'id',
         });
+        console.log(response);
 
         console.log(`File uploaded successfully, File ID: ${response.data.id}`);
         fs.unlinkSync(filePath); // ลบไฟล์หลังจากอัปโหลดสำเร็จ
