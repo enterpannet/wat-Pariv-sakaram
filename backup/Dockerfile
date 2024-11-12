@@ -20,7 +20,7 @@ ENV PG_HOST=<your_pg_host>
 ENV PG_PORT=5432
 ENV PG_DATABASE=<your_database_name>
 ENV BACKUP_DIR=/app/backups
-ENV GOOGLE_DRIVE_FOLDER_ID=<your_google_drive_folder_id>
+ENV GOOGLE_DRIVE_FOLDER_ID="/app/credentials/credentials.json"
 
 # สร้าง backup directory ใน container
 RUN mkdir -p $BACKUP_DIR
