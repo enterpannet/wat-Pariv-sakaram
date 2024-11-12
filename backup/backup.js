@@ -45,7 +45,8 @@ function backupDatabase() {
 // ฟังก์ชันอัปโหลดไฟล์ไป Google Drive
 async function uploadToGoogleDrive(filePath, fileName) {
     try {
-        console.log("Starting file upload...");
+        console.log('Starting file upload process...');
+        console.log(`Uploading ${filePath} as ${fileName}`);
 
         const fileMetadata = {
             name: fileName,
@@ -66,8 +67,26 @@ async function uploadToGoogleDrive(filePath, fileName) {
         fs.unlinkSync(filePath); // ลบไฟล์หลังจากอัปโหลดสำเร็จ
     } catch (error) {
         console.error(`Error uploading file to Google Drive: ${error.message}`);
+        if (error.response) {
+            console.error(`Error details: ${JSON.stringify(error.response.data)}`);
+        }
     }
 }
+async function listFilesInDrive() {
+    try {
+        const response = await drive.files.list({
+            pageSize: 10,
+            fields: 'files(id, name)',
+        });
+        console.log('Files in Drive:');
+        response.data.files.forEach((file) => console.log(`${file.name} (${file.id})`));
+    } catch (error) {
+        console.error(`Error listing files: ${error.message}`);
+    }
+}
+
+// ทดสอบเรียกใช้งานเพื่อดูว่าเข้าถึงได้หรือไม่
+listFilesInDrive();
 
 
 // ตั้ง cron job ให้ทำงานทุกวันตอนเที่ยงคืน
