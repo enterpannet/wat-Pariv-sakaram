@@ -27,7 +27,7 @@ services:
 
   backup-service:
     build:
-      context: ./backup # ใส่ path ของ directory ที่มี Dockerfile สำหรับ backup
+      context: ./backup
     container_name: pg_backup_service
     environment:
       PG_USER: "watRoot"
@@ -37,8 +37,10 @@ services:
       PG_DATABASE: "wat"
       BACKUP_DIR: "/app/backups"
       GOOGLE_DRIVE_FOLDER_ID: "1vmf26KBX70G9xaFOeip0ZPwEBXFYv9Mo"
+      GOOGLE_APPLICATION_CREDENTIALS: "/app/credentials/credentials.json"  # ชี้ไปยังไฟล์ credentials
     volumes:
       - ./backups:/app/backups
+      - /root/dtc/credentials.json:/app/credentials/credentials.json  # Mount ไฟล์ credentials.json
     networks:
       - app_network
     restart: unless-stopped
