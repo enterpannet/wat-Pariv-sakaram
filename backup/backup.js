@@ -106,10 +106,10 @@ async function listFilesInDrive() {
 listFilesInDrive();
 
 
-// ตั้ง cron job ให้ทำงานทุกวันตอนเที่ยงคืน
-// cron.schedule('30 0 * * *', backupDatabase, {
-//     scheduled: true,
-//     timezone: 'Asia/Bangkok',
-// });
-backupDatabase()
+
+cron.schedule('30 2 * * *', backupDatabase, {
+    scheduled: true,
+    timezone: 'Asia/Bangkok',
+});
+
 console.log('Database backup and upload to Google Drive scheduled to run daily at midnight.');
