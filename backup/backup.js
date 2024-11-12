@@ -36,14 +36,8 @@ function backupDatabase() {
             return;
         }
         console.log(`Backup command output: ${stdout}`);
-        
-        if (stderr) {
-            console.error(`pg_dump error: ${stderr}`);
-            return;
-        }
-        
-        console.log(`Backup successful: ${backupPath}`);
-        
+        console.log(`Backup command error output: ${stderr}`);
+
         // ตรวจสอบว่ามีไฟล์ที่สร้างขึ้นจริงหรือไม่
         if (fs.existsSync(backupPath)) {
             console.log("Backup file exists, proceeding to upload...");
