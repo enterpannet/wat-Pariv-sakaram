@@ -68,7 +68,7 @@ async function uploadToGoogleDrive(filePath, fileName) {
 }
 
 // ตั้ง cron job ให้ทำงานทุกวันตอนเที่ยงคืน
-cron.schedule('5 0 * * *', backupDatabase, {
+cron.schedule('30 0 * * *', backupDatabase, {
     scheduled: true,
     timezone: 'Asia/Bangkok',
 });
