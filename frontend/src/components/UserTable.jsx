@@ -60,26 +60,43 @@ function UserTable() {
             console.error("Error deleting user:", error);
         }
     };
-
     const toggleActiveStatus = async (id) => {
-        const user = users.find(user => user.id === id);
         try {
-            await axios.patch(`${import.meta.env.VITE_API_URL}/users/${id}/active-status`, { isActive: !user.isActive });
-            setUsers(users.map(user => user.id === id ? { ...user, isActive: !user.isActive } : user));
+            await axios.patch(`${import.meta.env.VITE_API_URL}/users/${id}/active-status`, {
+                isActive: !users.find(user => user.id === id).isActive,
+            });
+            
+            // อัปเดตทั้ง users และ sortedUsers
+            const updateUsers = prevUsers => prevUsers.map(user =>
+                user.id === id ? { ...user, isActive: !user.isActive } : user
+            );
+            
+            setUsers(updateUsers);
+            setSortedUsers(prev => updateUsers(prev));
         } catch (error) {
-            console.error("Error updating active status:", error);
+            console.error('Error updating user status:', error);
         }
     };
-
+    
     const toggleSetdownStatus = async (id) => {
-        const user = users.find(user => user.id === id);
         try {
-            await axios.patch(`${import.meta.env.VITE_API_URL}/users/${id}/setdown-status`, { IsSetdown: !user.IsSetdown });
-            setUsers(users.map(user => user.id === id ? { ...user, IsSetdown: !user.IsSetdown } : user));
+            const user = users.find(user => user.id === id);
+            const response = await axios.patch(`${import.meta.env.VITE_API_URL}/users/${id}/setdown-status`, {
+                IsSetdown: !user.IsSetdown
+            });
+            
+            // อัปเดตทั้ง users และ sortedUsers
+            const updateUsers = prevUsers => prevUsers.map(user =>
+                user.id === id ? { ...user, IsSetdown: !user.IsSetdown } : user
+            );
+            
+            setUsers(updateUsers);
+            setSortedUsers(prev => updateUsers(prev));
         } catch (error) {
             console.error("Error updating setdown status:", error);
         }
     };
+    
 
     const totalPages = Math.ceil(sortedUsers.length / usersPerPage);
     const indexOfLastUser = currentPage * usersPerPage;
@@ -105,7 +122,7 @@ function UserTable() {
             <h2 className="text-xl font-bold mb-4 text-center">รายชื่อพระปริวาสกรรม</h2>
             <p className="text-xl mb-4">จำนวนพระปริวาสทั้งหมด: {totalUsers} | จำนวนที่สวดแล้ว: {activeUsers} | จำนวนที่ยังไม่ได้สวด: {inactiveUsers}</p>
             <p className="text-xl mb-4">จำนวนที่จัดที่นั่งแล้ว: {setDownUsers} | จำนวนที่ยังไม่ได้จัดที่นั่ง: {inSetDownUsers}</p>
-            
+
             <table id="user-table" className="w-full border-collapse border border-gray-300">
                 <thead>
                     <tr className="bg-gray-200">
@@ -134,9 +151,17 @@ function UserTable() {
                             <td className="p-2 border">{user.phoneNumber}</td>
                             <td className="p-2 border">{user.chronicIllness}</td>
                             <td className="p-2 border">
-                                <button onClick={() => toggleActiveStatus(user.id)} className={`px-2 py-1 rounded mr-2 ${user.isActive ? 'bg-green-500' : 'bg-yellow-500'} text-white`}>{user.isActive ? 'สวดแล้ว' : 'ยังไม่ได้สวด'}</button>
-                                <button onClick={() => toggleSetdownStatus(user.id)} className={`px-2 py-1 rounded mr-2 ${user.IsSetdown ? 'bg-green-200' : 'bg-yellow-200'} text-black`}>{user.IsSetdown ? 'จัดที่นั่งแล้ว' : 'ยังไม่ได้จัดที่นั่ง'}</button>
-                                <button onClick={() => handleDelete(user.id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                                <button
+                                    onClick={() => toggleActiveStatus(user.id)}
+                                    className={`px-2 py-1 rounded mr-2 ${user.isActive ? 'bg-green-500' : 'bg-yellow-500'} text-white`}
+                                >
+                                    {user.isActive ? 'สวดแล้ว' : 'ยังไม่ได้สวด'}
+                                </button>
+                                <button onClick={() => toggleSetdownStatus(user.id)} 
+                                className={`px-2 py-1 rounded mr-2 ${user.IsSetdown ? 'bg-green-200' : 'bg-yellow-200'} text-black`}>
+                                    {user.IsSetdown ? 'จัดที่นั่งแล้ว' : 'ยังไม่ได้จัดที่นั่ง'}
+                                    </button>
+                                {/* <button onClick={() => handleDelete(user.id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button> */}
                             </td>
                         </tr>
                     ))}
