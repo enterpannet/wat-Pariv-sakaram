@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   backend:
     build:
@@ -23,6 +24,24 @@ services:
       - app_network
     stdin_open: true
     tty: true
+
+  backup-service:
+    build:
+      context: ./backup # ใส่ path ของ directory ที่มี Dockerfile สำหรับ backup
+    container_name: pg_backup_service
+    environment:
+      PG_USER: "watRoot"
+      PG_PASSWORD: "wat123546"
+      PG_HOST: "210.246.215.231"
+      PG_PORT: 5432
+      PG_DATABASE: "wat"
+      BACKUP_DIR: "/app/backups"
+      GOOGLE_DRIVE_FOLDER_ID: "1vmf26KBX70G9xaFOeip0ZPwEBXFYv9Mo"
+    volumes:
+      - ./backups:/app/backups
+    networks:
+      - app_network
+    restart: unless-stopped
 
 networks:
   app_network:

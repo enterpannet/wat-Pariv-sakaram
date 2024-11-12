@@ -7,26 +7,24 @@ const Summary = () => {
   const [expense, setExpense] = useState([]);
   const [currentIncomePage, setCurrentIncomePage] = useState(1);
   const [currentExpensePage, setCurrentExpensePage] = useState(1);
-  const itemsPerPage = 9;
-
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-  const [isEditPasswordModalVisible, setIsEditPasswordModalVisible] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
   const [editingAmount, setEditingAmount] = useState(0);
   const [editingDescription, setEditingDescription] = useState('');
-  const [editPassword, setEditPassword] = useState('');
-  const [editPasswordError, setEditPasswordError] = useState('');
-
+  const itemsPerPage = 9;
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [password, setPassword] = useState('');
   const [recordToDelete, setRecordToDelete] = useState(null);
   const [deleteError, setDeleteError] = useState('');
-
   useEffect(() => {
     fetchIncome();
     fetchExpense();
   }, []);
-
+  const showDeleteModal = (record) => {
+   
+    setRecordToDelete(record);
+    setIsDeleteModalVisible(true);
+};
   const fetchIncome = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/income`);
@@ -58,18 +56,7 @@ const Summary = () => {
     setEditingRecord(record);
     setEditingAmount(record.amount);
     setEditingDescription(record.description);
-    setIsEditPasswordModalVisible(true); // Show password modal first
-  };
-
-  const confirmEditPassword = () => {
-    if (editPassword === '0871955621') { // Replace with actual password
-      setIsEditPasswordModalVisible(false);
-      setIsEditModalVisible(true);
-      setEditPassword('');
-      setEditPasswordError('');
-    } else {
-      setEditPasswordError('Incorrect password. Please try again.');
-    }
+    setIsEditModalVisible(true);
   };
 
   const handleEdit = async () => {
@@ -84,14 +71,8 @@ const Summary = () => {
       console.error("Error editing record:", error);
     }
   };
-
-  const showDeleteModal = (record) => {
-    setRecordToDelete(record);
-    setIsDeleteModalVisible(true);
-  };
-
   const handleDelete = async () => {
-    if (password === '0871955621') {
+    if (password === '0871955621') { // Replace with the actual password you want to use
       try {
         if (recordToDelete.type === 'income') {
           await axios.delete(`${import.meta.env.VITE_API_URL}/income/${recordToDelete.id}`);
@@ -109,6 +90,23 @@ const Summary = () => {
       }
     } else {
       setDeleteError('Incorrect password. Please try again.');
+    }
+  };
+  const handleDeleteIncome = async (id) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/income/${id}`);
+      setIncome((prevIncome) => prevIncome.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Error deleting income:", error);
+    }
+  };
+
+  const handleDeleteExpense = async (id) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/expenses/${id}`);
+      setExpense((prevExpense) => prevExpense.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Error deleting expense:", error);
     }
   };
 
@@ -143,6 +141,7 @@ const Summary = () => {
       ),
     },
   ];
+
   const currentIncomeData = income.slice((currentIncomePage - 1) * itemsPerPage, currentIncomePage * itemsPerPage);
   const currentExpenseData = expense.slice((currentExpensePage - 1) * itemsPerPage, currentExpensePage * itemsPerPage);
 
@@ -180,44 +179,25 @@ const Summary = () => {
       ),
     },
   ];
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-    <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">สรุปรายรับรายจ่าย</h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-      <div className="bg-green-100 p-4 rounded-lg text-center">
-        <h3 className="text-xl font-semibold text-green-600">รายรับ</h3>
-        <p className="text-2xl text-green-800">{totalIncome} บาท</p>
+      <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">สรุปรายรับรายจ่าย</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+        <div className="bg-green-100 p-4 rounded-lg text-center">
+          <h3 className="text-xl font-semibold text-green-600">รายรับ</h3>
+          <p className="text-2xl text-green-800">{totalIncome} บาท</p>
+        </div>
+        <div className="bg-red-100 p-4 rounded-lg text-center">
+          <h3 className="text-xl font-semibold text-red-600">รายจ่าย</h3>
+          <p className="text-2xl text-red-800">{totalExpense} บาท</p>
+        </div>
       </div>
-      <div className="bg-red-100 p-4 rounded-lg text-center">
-        <h3 className="text-xl font-semibold text-red-600">รายจ่าย</h3>
-        <p className="text-2xl text-red-800">{totalExpense} บาท</p>
+      <div className="bg-blue-100 p-4 rounded-lg text-center mb-6">
+        <h3 className="text-xl font-semibold text-blue-600">ยอดคงเหลือ</h3>
+        <p className="text-2xl text-blue-800">{balance} บาท</p>
       </div>
-    </div>
-    <div className="bg-blue-100 p-4 rounded-lg text-center mb-6">
-      <h3 className="text-xl font-semibold text-blue-600">ยอดคงเหลือ</h3>
-      <p className="text-2xl text-blue-800">{balance} บาท</p>
-    </div>
-    <Tabs defaultActiveKey="1" centered items={items} className="sm:text-sm lg:text-base" />
-      <Modal
-        title="ยืนยันการแก้ไข"
-        open={isEditPasswordModalVisible}
-        onOk={confirmEditPassword}
-        onCancel={() => {
-          setIsEditPasswordModalVisible(false);
-          setEditPassword('');
-          setEditPasswordError('');
-        }}
-      >
-        <p>โปรดใส่รหัสผ่านเพื่อแก้ไขรายการ:</p>
-        <Input.Password
-          value={editPassword}
-          onChange={(e) => setEditPassword(e.target.value)}
-          placeholder="รหัสผ่าน"
-        />
-        {editPasswordError && <p style={{ color: 'red' }}>{editPasswordError}</p>}
-      </Modal>
-
-      {/* Edit Modal */}
+      <Tabs defaultActiveKey="1" centered items={items} className="sm:text-sm lg:text-base" />
       <Modal
         title="แก้ไขรายการ"
         open={isEditModalVisible}
@@ -225,14 +205,17 @@ const Summary = () => {
         onCancel={() => setIsEditModalVisible(false)}
       >
         <label>จำนวนเงิน:</label>
-        <Input type="number" value={editingAmount}
-          onChange={(e) => setEditingAmount(parseFloat(e.target.value))} />
+        <Input
+          type="number"
+          value={editingAmount}
+          onChange={(e) => setEditingAmount(parseFloat(e.target.value))}
+        />
         <label>รายละเอียด:</label>
-        <Input value={editingDescription} 
-          onChange={(e) => setEditingDescription(e.target.value)} />
+        <Input
+          value={editingDescription}
+          onChange={(e) => setEditingDescription(e.target.value)}
+        />
       </Modal>
-
-      {/* Delete Modal */}
       <Modal
         title="ยืนยันการลบ"
         open={isDeleteModalVisible}
