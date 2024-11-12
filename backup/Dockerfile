@@ -1,11 +1,13 @@
 # Dockerfile
-FROM node:14
+FROM node:20
 
 # ติดตั้ง postgresql-client เพื่อใช้งาน pg_dump
 RUN apt-get update && apt-get install -y postgresql-client
 
-# คัดลอกไฟล์ทั้งหมดจากโฟลเดอร์ backup ไปยัง container
+# กำหนด working directory ใน container
 WORKDIR /app
+
+# คัดลอกไฟล์ทั้งหมดจากโฟลเดอร์ backup ไปยัง container
 COPY . .
 
 # ติดตั้ง dependencies
