@@ -26,6 +26,7 @@ function backupDatabase() {
     const backupFileName = `backup-${PG_DATABASE}-${timestamp}.sql`;
     const backupPath = path.join(BACKUP_DIR, backupFileName);
 
+    console.log("Starting database backup...");
     const dumpCommand = `PGPASSWORD="${PG_PASSWORD}" pg_dump -U ${PG_USER} -h ${PG_HOST} -p ${PG_PORT} -F c -b -v -f ${backupPath} ${PG_DATABASE}`;
 
     exec(dumpCommand, (error, stdout, stderr) => {
@@ -33,14 +34,25 @@ function backupDatabase() {
             console.error(`Backup failed: ${error.message}`);
             return;
         }
+        console.log(`Backup command output: ${stdout}`);
+        
         if (stderr) {
             console.error(`pg_dump error: ${stderr}`);
             return;
         }
+        
         console.log(`Backup successful: ${backupPath}`);
-        uploadToGoogleDrive(backupPath, backupFileName);
+        
+        // ตรวจสอบว่ามีไฟล์ที่สร้างขึ้นจริงหรือไม่
+        if (fs.existsSync(backupPath)) {
+            console.log("Backup file exists, proceeding to upload...");
+            uploadToGoogleDrive(backupPath, backupFileName);
+        } else {
+            console.error("Backup file does not exist, cannot proceed to upload.");
+        }
     });
 }
+
 
 // ฟังก์ชันอัปโหลดไฟล์ไป Google Drive
 async function uploadToGoogleDrive(filePath, fileName) {
