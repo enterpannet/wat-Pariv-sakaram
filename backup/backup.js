@@ -25,7 +25,8 @@ function backupDatabase() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const backupFileName = `backup-${PG_DATABASE}-${timestamp}.sql`;
     const backupPath = path.join(BACKUP_DIR, backupFileName);
-
+    console.log(`Checking if backup file exists at: ${backupPath}`);
+    console.log(`File exists: ${fs.existsSync(backupPath)}`);
     console.log("Starting database backup...");
     const dumpCommand = `PGPASSWORD="${PG_PASSWORD}" pg_dump -U ${PG_USER} -h ${PG_HOST} -p ${PG_PORT} -F c -b -v -f ${backupPath} ${PG_DATABASE}`;
 
@@ -56,18 +57,20 @@ function backupDatabase() {
 
 // ฟังก์ชันอัปโหลดไฟล์ไป Google Drive
 async function uploadToGoogleDrive(filePath, fileName) {
+    console.log(`Attempting to upload ${filePath} to Google Drive`);
     try {
         console.log("Starting file upload...");
-
+        console.log(`Uploading file: ${fileName}`);
         const fileMetadata = {
             name: fileName,
             parents: [GOOGLE_DRIVE_FOLDER_ID],
         };
+        console.log(fileMetadata);
         const media = {
             mimeType: 'application/octet-stream',
             body: fs.createReadStream(filePath),
         };
-
+        console.log(media);
         const response = await drive.files.create({
             resource: fileMetadata,
             media: media,
