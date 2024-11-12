@@ -12,10 +12,10 @@ const PG_PORT = process.env.PG_PORT;
 const PG_DATABASE = process.env.PG_DATABASE;
 const BACKUP_DIR = process.env.BACKUP_DIR || './backups';
 const GOOGLE_DRIVE_FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID;
-
+const GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 // ตั้งค่า Google Drive API
 const auth = new google.auth.GoogleAuth({
-    keyFile: 'watwnkn-05f227c07dc1.json',
+    keyFile: `${GOOGLE_APPLICATION_CREDENTIALS}`,
     scopes: ['https://www.googleapis.com/auth/drive'],
 });
 const drive = google.drive({ version: 'v3', auth });
@@ -68,7 +68,7 @@ async function uploadToGoogleDrive(filePath, fileName) {
 }
 
 // ตั้ง cron job ให้ทำงานทุกวันตอนเที่ยงคืน
-cron.schedule('30 0 * * *', backupDatabase, {
+cron.schedule('37 0 * * *', backupDatabase, {
     scheduled: true,
     timezone: 'Asia/Bangkok',
 });
