@@ -37,10 +37,10 @@ services:
       PG_DATABASE: "wat"
       BACKUP_DIR: "/app/backups"
       GOOGLE_DRIVE_FOLDER_ID: "1vmf26KBX70G9xaFOeip0ZPwEBXFYv9Mo"
-      GOOGLE_APPLICATION_CREDENTIALS: "/app/credentials/watwnkn-05f227c07dc1.json"  # ชี้ไปยังไฟล์ credentials
+      GOOGLE_APPLICATION_CREDENTIALS: "/app/credentials/credentials.json"  # ชี้ไปยังไฟล์ credentials
     volumes:
       - ./backups:/app/backups
-      - /root/dtc/watwnkn-05f227c07dc1.json:/app/credentials/watwnkn-05f227c07dc1.json  # Mount ไฟล์ credentials.json
+      - /root/dtc/credentials.json:/app/credentials/credentials.json  # Mount ไฟล์ credentials.json
     networks:
       - app_network
     restart: unless-stopped
