@@ -27,4 +27,17 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        // Customize chunking here
+        manualChunks: {
+          // Example of moving dependencies to a vendor chunk
+          vendor: ['react', 'react-dom'],
+        },
+      },
+    },
+    // Optional: Increase chunk size limit if necessary
+    chunkSizeWarningLimit: 2000, // Adjust limit as needed, here set to 2000 kB
+  },
 });
