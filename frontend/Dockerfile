@@ -14,8 +14,11 @@ COPY . .
 # Build the app for production
 RUN bun run build
 
+# Install 'serve' globally
+RUN bun add serve
+
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Use Bun to serve the production build
-CMD ["bun", "run", "serve", "-s", "dist", "-l", "3000"]
+# Use 'serve' to serve the production build
+CMD ["serve", "-s", "dist", "-l", "3000"]
