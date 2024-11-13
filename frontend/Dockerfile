@@ -1,24 +1,21 @@
-# Dockerfile for React (frontend)
-FROM node:20
+# Use the Bun base image
+FROM jarredsumner/bun:edge
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN npm install
+# Copy package files and install dependencies using Bun
+COPY package*.json bun.lockb* ./
+RUN bun install
 
 # Copy the rest of the application code
 COPY . .
 
 # Build the app for production
-RUN npm run build
-
-# Install 'serve' to serve the production build
-RUN npm install -g serve
+RUN bun run build
 
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Use 'serve' to serve the production build
-CMD ["serve", "-s", "dist", "-l", "3000"]
+# Use Bun to serve the production build
+CMD ["bun", "run", "serve", "-s", "dist", "-l", "3000"]
