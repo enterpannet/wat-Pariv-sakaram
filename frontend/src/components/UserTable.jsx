@@ -118,7 +118,7 @@ function UserTable() {
     const inSetDownUsers = totalUsers - setDownUsers;
 
     return (
-        <div className="mt-8 bg-white p-4 rounded shadow-md overflow-x-auto">
+        <div className="mt-5 bg-white p-4 rounded shadow-md overflow-x-auto">
             <h2 className="text-xl font-bold mb-4 text-center">รายชื่อพระปริวาสกรรม</h2>
             <p className="text-xl mb-4">จำนวนพระปริวาสทั้งหมด: {totalUsers} | จำนวนที่สวดแล้ว: {activeUsers} | จำนวนที่ยังไม่ได้สวด: {inactiveUsers}</p>
             <p className="text-xl mb-4">จำนวนที่จัดที่นั่งแล้ว: {setDownUsers} | จำนวนที่ยังไม่ได้จัดที่นั่ง: {inSetDownUsers}</p>

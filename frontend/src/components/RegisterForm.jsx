@@ -64,8 +64,8 @@ const testModal=()=>{
                 </div>
             )}
             {/* <button onClick={()=>testModal()}>XXX</button> */}
-            <div className="flex flex-col justify-center items-center w-full min-h-screen mx-auto">
-                <p className='text-lg'>ลงทะเบียนพระปริวาส วัดหนองขนาก ประจำปี พ.ศ. 2567</p>
+            <div className="flex flex-col justify-center items-center w-full mx-auto mt-5">
+                <p className='text-lg text-center'>ลงทะเบียนพระปริวาส วัดหนองขนาก ประจำปี พ.ศ. 2567</p>
                 <p>ระหว่างวันที่ 10 - 19 พ.ย. 2567</p>
 
                 <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-md w-full max-w-md">
