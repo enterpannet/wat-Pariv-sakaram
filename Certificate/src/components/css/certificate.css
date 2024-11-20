@@ -1,0 +1,26 @@
+.certificate {
+    width: 800px;
+    height: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 5px solid #000;
+    text-align: center;
+    
+    font-family: 'TH SarabunPSK', sans-serif;
+    /* background-color: #fff; */
+  }
+  
+  .certificate h1 {
+    font-size: 48px;
+  }
+  
+  .certificate h2 {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+  
+  .certificate p {
+    font-size: 24px;
+    margin: 10px 0;
+  }
+  
